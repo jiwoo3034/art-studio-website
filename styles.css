@@ -564,7 +564,8 @@ cite {
     font-style: normal;
     font-family: var(--font-secondary);
     font-size: 1.6rem;
-    color: var(--color-medium-gray);
+    color: var(--color-off-black); /* Changed from var(--color-medium-gray) to improve contrast */
+    font-weight: 500; /* Added font weight for better readability */
 }
 
 /* ==========================================================================
