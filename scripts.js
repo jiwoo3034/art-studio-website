@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile Menu Toggle
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
+    const navLinksContainer = document.querySelector('.nav-links');
     
     if (mobileMenuToggle) {
         mobileMenuToggle.addEventListener('click', function() {
             this.classList.toggle('active');
-            navLinks.classList.toggle('active');
+            navLinksContainer.classList.toggle('active');
             document.body.classList.toggle('no-scroll');
         });
     }
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         item.addEventListener('click', () => {
             if (mobileMenuToggle.classList.contains('active')) {
                 mobileMenuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
+                navLinksContainer.classList.remove('active');
                 document.body.classList.remove('no-scroll');
             }
         });
@@ -53,7 +53,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event for scroll
     window.addEventListener('scroll', () => {
         handleScrollAnimation();
+        updateActiveNavLink(); // Update active navigation link while scrolling
     });
+    
+    // Update active navigation link based on scroll position
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    function updateActiveNavLink() {
+        let currentSection = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 100; // Offset to trigger slightly before reaching the section
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            
+            if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+                currentSection = sectionId;
+            }
+        });
+        
+        // Update active class on nav links
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (currentSection && link.getAttribute('href') === `#${currentSection}`) {
+                link.classList.add('active');
+            } else if (window.pageYOffset < 100 && link.getAttribute('href') === '#') {
+                // When at the top of the page, make Home active
+                link.classList.add('active');
+            }
+        });
+    }
+    
+    // Initial call to set the active link on page load
+    updateActiveNavLink();
     
     // Form Submission
     const contactForm = document.querySelector('.contact-form');
